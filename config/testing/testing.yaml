@@ -1,0 +1,4 @@
+# @package testing
+# Testing configuration
+test_episodes: 2  # Number of episodes to run when testing
+take_best_model: false  # Decide to take the best model evaluated with EvalCallback or not

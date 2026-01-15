@@ -1,6 +1,5 @@
 # @package training
-learning_rate: 0.001
-batch_size: 32
-num_epochs: 100
-optimizer: adam
-weight_decay: 0.00001
+# Training configuration
+timesteps: 50000
+mode: 1  # 1: train, 2: test
+seed: 0

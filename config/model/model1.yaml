@@ -1,5 +1,6 @@
 # @package model
-name: model1
-hidden_dim: 128
-num_layers: 2
-activation: relu
+# Model configuration
+name: base_model
+manual: false  # If True, model is created with specified parameters (Use only in Problem 3!)
+model_save_bool: true  # If true, save model after training
+dir: null  # Directory for saved model (will be computed automatically)

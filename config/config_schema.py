@@ -1,23 +1,21 @@
 """Configuration schemas using dataclasses for type safety."""
 
-from dataclasses import dataclass, field
-
-from config.environment.environment_schema import EnvironmentConfig
-from config.logging.logging_schema import LoggingConfig
-from config.model.model_schema import ModelConfig
-from config.saving.saving_schema import SavingConfig
-from config.training.training_schema import TrainingConfig
+from dataclasses import dataclass
 
 
 @dataclass
 class Config:
     """Root configuration combining all sub-configs."""
 
-    environment: EnvironmentConfig = field(default_factory=EnvironmentConfig)
-    model: ModelConfig = field(default_factory=ModelConfig)
-    training: TrainingConfig = field(default_factory=TrainingConfig)
-    logging: LoggingConfig = field(default_factory=LoggingConfig)
-    saving: SavingConfig = field(default_factory=SavingConfig)
-    experiment_name: str = "default_experiment"
-    seed: int = 42
-    device: str = "cpu"  # cpu, cuda
+    algo: str = "PPO"  # Options: PPO, DQN, A2C
+    timesteps: int = 50000
+    mode: int = 1  # 1: train, 2: test
+    seed: int = 0
+    env_name: str = "Protein-Design-v0"
+    variable_motif: bool = False
+    variable_length: bool = False
+    manual: bool = False
+    model_save_bool: bool = True
+    dir: str = None
+    test_episodes: int = 2
+    take_best_model: bool = False

@@ -1,2 +1,5 @@
 # @package environment
-name: roboml_research_environment
+# Environment configuration
+env_name: protein_design_env
+variable_motif: false  # Enable variable motif (Problem 3)
+variable_length: false  # Enable variable sequence length (Problems 2 and 3)

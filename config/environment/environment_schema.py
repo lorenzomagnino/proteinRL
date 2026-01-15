@@ -5,4 +5,6 @@ from dataclasses import dataclass
 class EnvironmentConfig:
     """Environment configuration."""
 
-    name: str = "default_environment"
+    env_name: str = "default_environment"
+    variable_motif: bool = False
+    variable_length: bool = False

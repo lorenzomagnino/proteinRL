@@ -1,13 +1,24 @@
 # @package _global_
 
-defaults:
-  - _self_
-  - environment: environment
-  - model: model1
-  - training: training_v0
-  - logging: logging
-  - saving: saving
+# RL Algorithm configuration
+algo: PPO  # Options: PPO, DQN, A2C
 
-experiment_name: default_experiment
-seed: 42
-device: cpu  # cpu, cuda
+# Training configuration
+timesteps: 50000
+mode: 1  # 1: train, 2: test
+seed: 0
+
+# Environment configuration
+env_name: Protein-Design-v0
+variable_motif: false  # Enable variable motif (Problem 3)
+variable_length: true  # Enable variable sequence length (Problems 2 and 3)
+
+# Model configuration
+manual: false  # If True, model is created with specified parameters (Use only in Problem 3!)
+model_save_bool: true  # If true, save model after training
+dir: null  # Directory for saved model (will be computed automatically)
+
+# Testing configuration
+test_episodes: 2  # Number of episodes to run when testing
+take_best_model: false  # Decide to take the best model evaluated with EvalCallback or not
+

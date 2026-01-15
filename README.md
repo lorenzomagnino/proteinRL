@@ -1,99 +1,58 @@
-#  🧩 RoboML Research Template
+# Protein Design Environment
 
-A lightweight, opinionated template for running machine learning and robotics research projects. It provides a standardized structure for experiments, data handling, logging, and evaluation, with ready-to-use configs and scripts for reproducible workflows.
+The **Protein Design Environment** is a reinforcement learning (RL) environment designed as a toy protein design
+environment.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![uv](https://img.shields.io/badge/uv-package%20manager-purple.svg)](https://github.com/astral-sh/uv)
-[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
+## Environment Description
 
-## Features
+In this environment, the agent acts by sequentially building a protein sequence.
 
-- **Hydra Configuration Management**: Modular config structure with separate files for model, training, and wandb settings
-- **Type-Safe Configs**: Dataclass schemas for configuration validation and IDE support
-- **Wandb Integration**: Built-in experiment tracking and logging
-- **Fast Package Management**: Uses `uv` for quick dependency installation
-- **Development Tools**: Pre-commit hooks with ruff and black for code quality
-- **Auto-formatting**: Ruff automatically formats Python files on save (VS Code/Cursor)
+### Key Features
 
-## Setup
+- **Dynamic Motifs**:
+    - A fixed target motif, such as `ARGININE, ISOLEUCINE`, can be used.
+    - Alternatively, a random motif of length between 2 and 4 is generated for each episode.
+- **Flexible Sequence Lengths**:
+    - Sequence lengths can be fixed at 15.
+    - The lengths can vary randomly between 15 and 25 for each episode.
+- **Reward Structure**:
+    - **Motif Rewards**: Bonus for an occurrence of the target motif in the sequence. Smaller bonus added for each amino acids of the target motif is in the sequence.
+    - **Charge Penalty**: Penalty if the sequence is not neutral in the end of the episode.
 
-### Prerequisites
+### Environment Mechanics
 
-- Python 3.8+
-- [uv](https://github.com/astral-sh/uv) package manager
+- **Actions**: The agent chooses an amino acid to append to the sequence.
+- **Observation**:
+    - The current sequence (padded to a maximum length).
+    - The length of the sequence.
+    - The target motif (padded to a maximum length).
+    - The sequence's charge and the target sequence length.
+- **Termination**: An episode ends when the sequence reaches the pre-defined or random length for that episode.
 
-### Installation
+## Goal of the Agent
 
-1. Clone the repository:
-```bash
-git clone <repository-url>
-cd roboml-research-template
-```
+The agent's goal is to optimize amino acid sequences that:
 
-2. Install dependencies:
-```bash
-uv venv
-source .venv/bin/activate
-make install
-```
+1. **Design a sequence containing the pattern**: Include an instance of the target motif within the sequence.
+2. **Achieve Charge Neutrality**: Ensure the sequence has a net charge of zero to avoid penalties.
 
-**Note**: This template installs dependencies directly rather than using `pip install -e ".[dev]"` because it's structured as a template repository, not an installable Python package.
+## Getting Started
 
-3. (Optional) Install pre-commit hooks:
-```bash
-make pre-commit-install
-```
-
-### Hands on
-```bash
-python main.py
-```
-
-### Configuration
-
-Configuration files are located in the `config/` directory:
-- `defaults.yaml`: Main defaults file that imports all configs
-- `model.yaml`: Model architecture parameters
-- `training.yaml`: Training hyperparameters
-- `wandb.yaml`: Wandb project settings
-- `config.yaml`: General experiment settings
-
-Override config values via command line:
-```bash
-python main.py training.learning_rate=0.01 training.batch_size=64
-```
-
-### Development
-
-- **Lint code**: `make lint`
-- **Format code**: `make format`
-- **Run tests**: `make test`
-- **Clean cache**: `make clean`
-
-## Project Structure
+- Clone this repository:
 
 ```
-roboml-research-template/
-├── config/              # Hydra configuration files
-│   ├── config_schema.py # Dataclass schemas
-│   ├── defaults.yaml    # Main defaults
-│   ├── model.yaml       # Model config
-│   ├── training.yaml    # Training config
-│   ├── wandb.yaml       # Wandb config
-│   └── config.yaml      # General config
-├── networks/            # Network architectures
-├── learner/             # Learning algorithms
-├── tests/               # Test files
-└── main.py              # Entry point
+git clone https://github.com/lorenzomagnino/Protein-Design-RL.git
+cd Protein-Design-RL
 ```
 
-## Contributing
-
-Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
-
-## License
-
-See LICENSE file for details.
+- Install uv with curl (or the latest version with pip): ```curl -LsSf https://astral.sh/uv/install.sh | sh```
+- Install python 3.10.15: ```uv python install 3.10.15```
+- Create virtual environment: ```uv venv --python=3.10.15```
+- Activate virtual environment: ```source .venv/bin/activate```
+- Install all requirements: ```uv sync```
+- Install the protein-design-env package: ```pip install -e .```
+- Install other important libraries: ```pip install colorlog, tensorboard, torch```
+- Launch the rollout script: ```uv run python scripts/rollout.py```
+- To train the agent for Problem 1 with PPO (similar for Problem 2 and 3): ```python problem_3.py --mode 1 --algo PPO --timesteps 100000```
+- To visualize training metrics (port 6008 is arbitrary, you can use default 6006): ```tensorboard --logdir ./saved-model --port 6008```
+- To test with the trained model: ```python problem_3.py --mode 2 --algo PPO --take_best_model True```

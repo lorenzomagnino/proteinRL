@@ -2,13 +2,14 @@
 
 from typing import Any
 
-from omegaconf import DictConfig, OmegaConf
 from rich.console import Console
 from rich.table import Table
 from rich.tree import Tree
 
+from config.config_schema import Config
 
-def print_config_table(cfg: DictConfig, style: str = "tree") -> None:
+
+def print_config_table(cfg: Config, style: str = "tree") -> None:
     """Print configuration in a nice hierarchical format.
 
     Args:
@@ -21,7 +22,7 @@ def print_config_table(cfg: DictConfig, style: str = "tree") -> None:
         print_config_tree(cfg)
 
 
-def print_config_tree(cfg: DictConfig) -> None:
+def print_config_tree(cfg: Config) -> None:
     """Print configuration in a nice hierarchical tree format.
 
     Args:
@@ -45,17 +46,17 @@ def print_config_tree(cfg: DictConfig) -> None:
         """Recursively add nodes to the tree."""
         full_path = f"{path}.{key}" if path else key
 
-        if OmegaConf.is_dict(value):
+        if isinstance(value, dict):
             node = parent.add(f"[bold cyan]{key}[/bold cyan]", style="dim")
             for k, v in value.items():
                 add_node(node, k, v, full_path)
-        elif OmegaConf.is_list(value):
+        elif isinstance(value, list):
             if len(value) == 0:
                 parent.add(f"[bold]{key}[/bold]: [dim]empty list[/dim]")
             else:
                 node = parent.add(f"[bold cyan]{key}[/bold cyan]: [dim]{len(value)} item(s)[/dim]")
                 for i, item in enumerate(value):
-                    if OmegaConf.is_dict(item) or OmegaConf.is_list(item):
+                    if isinstance(item, dict) or isinstance(item, list):
                         add_node(node, f"[{i}]", item, full_path)
                     else:
                         node.add(f"  [{i}]: {format_value(item)}")
@@ -79,7 +80,7 @@ def print_config_tree(cfg: DictConfig) -> None:
     console.print(tree)
 
 
-def print_config_table_compact(cfg: DictConfig) -> None:
+def print_config_table_compact(cfg: Config) -> None:
     """Print configuration in a compact table format with hierarchical paths.
 
     Args:
@@ -102,17 +103,17 @@ def print_config_table_compact(cfg: DictConfig) -> None:
 
     def add_rows(value: Any, path: str = "") -> None:
         """Recursively add rows to the table."""
-        if OmegaConf.is_dict(value):
+        if isinstance(value, dict):
             for k, v in value.items():
                 new_path = f"{path}.{k}" if path else k
                 add_rows(v, new_path)
-        elif OmegaConf.is_list(value):
+        elif isinstance(value, list):
             if len(value) == 0:
                 table.add_row(path, "[dim]empty list[/dim]")
             else:
                 for i, item in enumerate(value):
                     new_path = f"{path}[{i}]" if path else f"[{i}]"
-                    if OmegaConf.is_dict(item) or OmegaConf.is_list(item):
+                    if isinstance(item, dict) or isinstance(item, list):
                         add_rows(item, new_path)
                     else:
                         table.add_row(new_path, format_value(item))
