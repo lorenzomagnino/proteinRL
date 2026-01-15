@@ -1,5 +1,12 @@
 # Protein Design Environment
 
+![License](https://img.shields.io/badge/License-MIT-yellow.svg)
+![Python](https://img.shields.io/badge/python-3.10+-blue.svg)
+![uv](https://img.shields.io/badge/uv-package%20manager-purple.svg)
+![Ruff](https://img.shields.io/badge/ruff-⚡-yellow.svg)
+![Code style](https://img.shields.io/badge/code%20style-black-black.svg)
+![pre-commit](https://img.shields.io/badge/pre--commit-enabled-green.svg)
+
 <div align="center">
   <img src="protein_design_cover.png" alt="Protein Design Environment" width="600"/>
 </div>
